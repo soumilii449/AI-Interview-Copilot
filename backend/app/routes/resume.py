@@ -2,7 +2,7 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 import os
 import shutil
 
-router = APIRouter()
+router = APIRouter(tags=["Resume"])
 
 UPLOAD_FOLDER = "uploads"
 
@@ -20,12 +20,13 @@ async def upload_resume(file: UploadFile = File(...)):
             detail="Only PDF files are allowed."
         )
 
-    file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+    # Always save the uploaded resume with the same name
+    file_path = os.path.join(UPLOAD_FOLDER, "resume.pdf")
 
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
     return {
         "message": "Resume uploaded successfully!",
-        "filename": file.filename
+        "filename": "resume.pdf"
     }

@@ -9,8 +9,8 @@ def generate_interview_questions():
     print("Step 1")
 
     resume_text = extract_text_from_pdf(
-        "uploads/ServiceNow Certified Application Developer (CAD).pdf"
-    )
+    "uploads/resume.pdf"
+)
 
     print("Step 2")
 
