@@ -2,16 +2,16 @@ import os
 from dotenv import load_dotenv
 from google import genai
 
-# Load environment variables
 load_dotenv()
 
-# Create Gemini client
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+api_key = os.getenv("GEMINI_API_KEY")
+print("API Key Loaded:", api_key)
+
+client = genai.Client(api_key=api_key)
 
 def ask_gemini(prompt):
     response = client.models.generate_content(
         model="gemini-2.5-flash",
         contents=prompt
     )
-
     return response.text

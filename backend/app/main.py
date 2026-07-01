@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.routes import resume
+from app.routes import question_routes
 
 app = FastAPI(
     title="AI Interview Copilot API",
@@ -8,6 +9,7 @@ app = FastAPI(
 )
 
 app.include_router(resume.router)
+app.include_router(question_routes.router)
 
 @app.get("/")
 def home():
