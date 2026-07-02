@@ -2,12 +2,10 @@ import { useState } from "react";
 import api from "../services/api";
 
 function ResumeUpload() {
-
     const [file, setFile] = useState(null);
     const [message, setMessage] = useState("");
 
     const handleUpload = async () => {
-
         if (!file) {
             alert("Please select a PDF.");
             return;
@@ -17,7 +15,6 @@ function ResumeUpload() {
         formData.append("file", file);
 
         try {
-
             const response = await api.post(
                 "/upload-resume",
                 formData
@@ -26,29 +23,40 @@ function ResumeUpload() {
             setMessage(response.data.message);
 
         } catch (error) {
-
             setMessage("Upload failed.");
         }
     };
 
     return (
-        <div>
+        <div className="card">
 
-            <h2>Upload Resume</h2>
+            <h2>📄 Upload Resume</h2>
 
             <input
+                className="file-input"
                 type="file"
                 accept=".pdf"
                 onChange={(e) => setFile(e.target.files[0])}
             />
 
-            <br /><br />
+            {file && (
+                <p className="file-name">
+                    Selected: <strong>{file.name}</strong>
+                </p>
+            )}
 
-            <button onClick={handleUpload}>
+            <button
+                className="primary-btn"
+                onClick={handleUpload}
+            >
                 Upload Resume
             </button>
 
-            <p>{message}</p>
+            {message && (
+                <p className="success-text">
+                    {message}
+                </p>
+            )}
 
         </div>
     );
