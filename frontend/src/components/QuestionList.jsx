@@ -11,6 +11,7 @@ function QuestionList() {
     const [questions, setQuestions] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [evaluation, setEvaluation] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const generateQuestions = async () => {
 
@@ -35,6 +36,8 @@ function QuestionList() {
 
         try {
 
+            setLoading(true);
+
             const response = await api.post("/evaluate-answer", {
 
                 question: questions[currentIndex],
@@ -48,6 +51,10 @@ function QuestionList() {
 
             console.log(error);
             alert("Evaluation failed.");
+
+        } finally {
+
+            setLoading(false);
 
         }
 
@@ -77,30 +84,33 @@ function QuestionList() {
             {questions.length > 0 && (
 
                 <>
-                   <InterviewTimer />
 
-<br />
+                    <InterviewTimer />
+
+                    <br />
+
                     <h2>
                         Question {currentIndex + 1} of {questions.length}
                     </h2>
 
                     <ProgressBar
-    current={currentIndex + 1}
-    total={questions.length}
-/>
+                        current={currentIndex + 1}
+                        total={questions.length}
+                    />
 
-<br />
+                    <br />
 
                     <QuestionCard
                         question={questions[currentIndex]}
                         onSubmit={submitAnswer}
+                        loading={loading}
                     />
 
                     <EvaluationCard
                         evaluation={evaluation}
                     />
 
-                    {/* Show Next Question button */}
+                    {/* Next Question Button */}
                     {evaluation && currentIndex < questions.length - 1 && (
 
                         <button onClick={nextQuestion}>
@@ -109,7 +119,7 @@ function QuestionList() {
 
                     )}
 
-                    {/* Show completion message after last question */}
+                    {/* Interview Completed */}
                     {evaluation && currentIndex === questions.length - 1 && (
 
                         <div style={{ marginTop: "30px" }}>
@@ -122,9 +132,11 @@ function QuestionList() {
 
                             <button
                                 onClick={() => {
+
                                     setQuestions([]);
                                     setCurrentIndex(0);
                                     setEvaluation(null);
+
                                 }}
                             >
                                 Start New Interview
